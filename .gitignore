@@ -35,6 +35,7 @@ CMakeFiles
 CMakeCache.txt
 cmake_install.cmake
 cmake
+*cmake
 
 # Prerequisites
 *.d
