@@ -57,8 +57,31 @@ namespace json
 				|| m_value != other.m_value;
 		}
 
-		number& operator++ () { m_value++; return *this; }
-		number& operator-- () { m_value--; return *this; }
+		number& operator= (const int value)
+		{
+			m_type = Type::Int;
+			m_value = value;
+			return *this;
+		}
+
+		number& operator= (const float value)
+		{
+			m_type = Type::Float;
+			m_value = value;
+			return *this;
+		}
+
+		number& operator= (const double value)
+		{
+			m_type = Type::Double;
+			m_value = value;
+			return *this;
+		}
+
+		number& operator++ () { m_value += 1; return *this; }
+		number& operator++ (int) { m_value += 1; return *this; }
+		number& operator-- () { m_value -= 1; return *this; }
+		number& operator-- (int) { m_value -= 1; return *this; }
 
 		number& operator+= (const int value) { m_value += value; return *this; }
 		number& operator+= (const float value) { m_value += value; return *this; }
