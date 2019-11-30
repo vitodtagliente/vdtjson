@@ -18,6 +18,8 @@ int main()
 	a = 4;
 	a = 3.5f;
 	a = 4.0;
+	a += 3;
+	(a += 5.0f) *= 5;
 
 	cout << "Premi un tasto per continuare...";
 	return getchar();

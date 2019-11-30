@@ -1,4 +1,8 @@
+/// Copyright (c) Vito Domenico Tagliente
+
 #pragma once
+
+#include <string>
 
 namespace json
 {
@@ -6,11 +10,11 @@ namespace json
 	{
 	public:
 
-		enum class Type 
+		enum class Type : uint8_t
 		{
-			Int = 0,
-			Float = 1,
-			Double = 2
+			Int		= 0,
+			Float	= 1,
+			Double	= 2
 		};
 
 		using value_t = double;
@@ -83,37 +87,57 @@ namespace json
 		number& operator-- () { m_value -= 1; return *this; }
 		number& operator-- (int) { m_value -= 1; return *this; }
 
-		number& operator+= (const int value) { m_value += value; return *this; }
-		number& operator+= (const float value) { m_value += value; return *this; }
-		number& operator+= (const double value) { m_value += value; return *this; }
+		template<typename T, typename TEnable = std::enable_if_t<std::is_arithmetic<T>::value>>
+		number& operator += (const T value) 
+		{ 
+			m_value += static_cast<double>(value); 
+			return *this; 
+		}
 
-		number& operator-= (const int value) { m_value -= value; return *this; }
-		number& operator-= (const float value) { m_value -= value; return *this; }
-		number& operator-= (const double value) { m_value -= value; return *this; }
+		template<typename T, typename TEnable = std::enable_if_t<std::is_arithmetic<T>::value>>
+		number& operator -= (const T value) 
+		{ 
+			m_value -= static_cast<double>(value); 
+			return *this; 
+		}
 
-		number& operator*= (const int value) { m_value *= value; return *this; }
-		number& operator*= (const float value) { m_value *= value; return *this; }
-		number& operator*= (const double value) { m_value *= value; return *this; }
+		template<typename T, typename TEnable = std::enable_if_t<std::is_arithmetic<T>::value>>
+		number& operator *= (const T value) 
+		{
+			m_value *= static_cast<double>(value); 
+			return *this; 
+		}
 
-		number& operator/= (const int value) { m_value /= value; return *this; }
-		number& operator/= (const float value) { m_value /= value; return *this; }
-		number& operator/= (const double value) { m_value /= value; return *this; }
+		template<typename T, typename TEnable = std::enable_if_t<std::is_arithmetic<T>::value>>
+		number& operator /= (const T value) 
+		{ 
+			m_value /= static_cast<double>(value); 
+			return *this; 
+		}
 
-		number operator+ (const int value) const { return number(m_type, m_value + value); }
-		number operator+ (const float value) const { return number(m_type, m_value + value); }
-		number operator+ (const double value) const { return number(m_type, m_value + value); }
+		template<typename T, typename TEnable = std::enable_if_t<std::is_arithmetic<T>::value>>
+		number operator+ (const T value) const 
+		{ 
+			return number(m_type, m_value + static_cast<double>(value)); 
+		}
 
-		number operator- (const int value) const { return number(m_type, m_value - value); }
-		number operator- (const float value) const { return number(m_type, m_value - value); }
-		number operator- (const double value) const { return number(m_type, m_value - value); }
+		template<typename T, typename TEnable = std::enable_if_t<std::is_arithmetic<T>::value>>
+		number operator- (const T value) const 
+		{ 
+			return number(m_type, m_value - static_cast<double>(value)); 
+		}
 
-		number operator* (const int value) const { return number(m_type, m_value * value); }
-		number operator* (const float value) const { return number(m_type, m_value * value); }
-		number operator* (const double value) const { return number(m_type, m_value * value); }
+		template<typename T, typename TEnable = std::enable_if_t<std::is_arithmetic<T>::value>>
+		number operator* (const T value) const 
+		{ 
+			return number(m_type, m_value * static_cast<double>(value)); 
+		}
 
-		number operator/ (const int value) const { return number(m_type, m_value / value); }
-		number operator/ (const float value) const { return number(m_type, m_value / value); }
-		number operator/ (const double value) const { return number(m_type, m_value / value); }
+		template<typename T, typename TEnable = std::enable_if_t<std::is_arithmetic<T>::value>>
+		number operator/ (const T value) const 
+		{ 
+			return number(m_type, m_value / static_cast<double>(value)); 
+		}
 
 	private:
 
