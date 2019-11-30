@@ -100,13 +100,54 @@ namespace json
 				|| m_value != other.m_value;
 		}
 
-		value& operator= (const bool value)	{ m_type = Type::Bool; m_value = value;	return *this; }
-		value& operator= (const int value) { m_type = Type::Number; m_value = number(value); return *this; }
-		value& operator= (const float value) { m_type = Type::Number; m_value = number(value); return *this; }
-		value& operator= (const double value) { m_type = Type::Number; m_value = number(value); return *this; }
-		value& operator= (const array_t& value) { m_type = Type::Array; m_value = value; return *this; }
-		value& operator= (const std::string& value) { m_type = Type::String; m_value = value; return *this; }
-		value& operator= (const object_t& value) { m_type = Type::Object; m_value = value; return *this; }
+		value& operator= (const bool value)	
+		{ 
+			m_type = Type::Bool; 
+			m_value = value;	
+			return *this; 
+		}
+		
+		value& operator= (const int value) 
+		{ 
+			m_type = Type::Number; 
+			m_value = number(value); 
+			return *this; 
+		}
+		
+		value& operator= (const float value) 
+		{ 
+			m_type = Type::Number; 
+			m_value = number(value); 
+			return *this; 
+		}
+		
+		value& operator= (const double value) 
+		{ 
+			m_type = Type::Number; 
+			m_value = number(value); 
+			return *this; 
+		}
+		
+		value& operator= (const array_t& value) 
+		{ 
+			m_type = Type::Array; 
+			m_value = value; 
+			return *this; 
+		}
+		
+		value& operator= (const std::string& value) 
+		{ 
+			m_type = Type::String; 
+			m_value = value; 
+			return *this; 
+		}
+		
+		value& operator= (const object_t& value) 
+		{ 
+			m_type = Type::Object; 
+			m_value = value; 
+			return *this; 
+		}
 
 		template<typename T, typename TEnable = std::enable_if_t<std::is_arithmetic<T>::value>>
 		value& operator += (const T value)
