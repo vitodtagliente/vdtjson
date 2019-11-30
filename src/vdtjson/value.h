@@ -82,14 +82,11 @@ namespace json
 		bool is_object() const { return m_type == Type::Object; }
 		bool is_string() const { return m_type == Type::String; }
 
-		bool as_bool() const { return std::get<bool>(m_value); }
-		const number& as_number() { return std::get<number>(m_value); }
-		int as_int() const { return std::get<number>(m_value).as_int(); }
-		float as_float() const { return std::get<number>(m_value).as_float(); }
-		double as_double() const { return std::get<number>(m_value).as_double(); }
-		const array_t& as_array() const { return std::get<array_t>(m_value); }
-		const object_t& ar_object() const { return std::get<object_t>(m_value); }
-		const std::string& as_string() const { return std::get<std::string>(m_value); }
+		bool& as_bool() const { return std::get<bool&>(m_value); }
+		number& as_number() { return std::get<number&>(m_value); }
+		array_t& as_array() const { return std::get<array_t&>(m_value); }
+		object_t& as_object() const { return std::get<object_t&>(m_value); }
+		std::string& as_string() const { return std::get<std::string&>(m_value); }
 
 		bool operator== (const value& other) const
 		{
@@ -173,6 +170,36 @@ namespace json
 			if (m_type == Type::Number)
 				return value(m_type, as_number() / value);
 			return *this;
+		}
+
+		value& operator[](size_t index)
+		{
+			return as_array().at(index);
+		}
+
+		const value& operator[](size_t index) const
+		{
+			return as_array().at(index);
+		}
+
+		value& operator[](const char* key)
+		{
+			return as_object()[std::string(key)];
+		}
+
+		value& operator[](const std::string& key)
+		{
+			return as_object()[key];
+		}
+
+		const value& operator[](const char* key) const
+		{
+			return as_object()[std::string(key)];
+		}
+
+		const value& operator[](const std::string& key) const
+		{
+			return as_object()[key];
 		}
 
 	private:
