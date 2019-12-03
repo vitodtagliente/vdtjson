@@ -1,5 +1,5 @@
 #include <iostream>
-#include <vdtjson/number.h>
+#include <vdtjson/json.h>
 
 using namespace std;
 using namespace json;
@@ -20,6 +20,14 @@ int main()
 	a = 4.0;
 	a += 3;
 	(a += 5.0f) *= 5;
+
+	json::value v({ value("ciao"), value(2), value(3.4f) });
+	json::value ciao("ciao");
+
+
+	cout << endl << json::to_string(a);
+	cout << endl << json::to_string(ciao);
+	cout << endl << json::to_string(v);
 
 	cout << "Premi un tasto per continuare...";
 	return getchar();
