@@ -73,6 +73,11 @@ namespace json
 			, m_value(value)
 		{}
 
+		value(const number& value)
+			: m_type(Type::Number)
+			, m_value(value)
+		{}
+
 		Type type() const { return m_type; }
 
 		bool is_array() const { return m_type == Type::Array; }
@@ -149,6 +154,46 @@ namespace json
 			return *this; 
 		}
 
+		// Prefix increment operator
+		value& operator++ () 
+		{
+			if (is_number())
+				as_number()++;
+			return *this;
+		}
+
+		// Postfix increment operator
+		value operator++ (int)
+		{
+			if (is_number())
+			{
+				value temp(as_number());
+				as_number()++;
+				return temp;
+			}
+			return *this;
+		}
+
+		// Prefix decrement operator
+		value& operator-- ()
+		{
+			if (is_number())
+				as_number()--;
+			return *this;
+		}
+
+		// Postfix decrement operator
+		value operator-- (int)
+		{
+			if (is_number())
+			{
+				value temp(as_number());
+				as_number()--;
+				return temp;
+			}
+			return *this;
+		}
+
 		template<typename T, typename TEnable = std::enable_if_t<std::is_arithmetic<T>::value>>
 		value& operator += (const T value)
 		{ 
@@ -185,7 +230,7 @@ namespace json
 		value operator+ (const T value) const
 		{
 			if (m_type == Type::Number) 
-				return value(m_type, as_number() + value);
+				return value(as_number() + value);
 			return *this;
 		}
 
@@ -193,7 +238,7 @@ namespace json
 		value operator- (const T value) const
 		{
 			if (m_type == Type::Number)
-				return value(m_type, as_number() - value);
+				return value(as_number() - value);
 			return *this;
 		}
 
@@ -201,7 +246,7 @@ namespace json
 		value operator* (const T value) const
 		{
 			if (m_type == Type::Number)
-				return value(m_type, as_number() * value);
+				return value(as_number() * value);
 			return *this;
 		}
 
@@ -209,7 +254,7 @@ namespace json
 		value operator/ (const T value) const
 		{
 			if (m_type == Type::Number)
-				return value(m_type, as_number() / value);
+				return value(as_number() / value);
 			return *this;
 		}
 
@@ -244,11 +289,6 @@ namespace json
 		}
 
 	private:
-
-		value(const Type type, const number& value)
-			: m_type(type)
-			, m_value(value)
-		{}
 
 		Type m_type;
 		std::variant<array_t, bool, number, object_t, std::string> m_value;

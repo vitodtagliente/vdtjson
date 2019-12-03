@@ -82,10 +82,24 @@ namespace json
 			return *this;
 		}
 
-		number& operator++ () { m_value += 1; return *this; }
-		number& operator++ (int) { m_value += 1; return *this; }
-		number& operator-- () { m_value -= 1; return *this; }
-		number& operator-- (int) { m_value -= 1; return *this; }
+		// Prefix increment operator
+		number& operator++ () { m_value++; return *this; }
+		// Postfix increment operator
+		number operator++ (int)
+		{
+			number temp(m_type, m_value);
+			++(*this);
+			return temp;
+		}
+		// Prefix decrement operator
+		number& operator-- () { m_value--; return *this; }
+		// Postfix decrement operator
+		number operator-- (int)
+		{
+			number temp(m_type, m_value);
+			--(*this);
+			return temp;
+		}
 
 		template<typename T, typename TEnable = std::enable_if_t<std::is_arithmetic<T>::value>>
 		number& operator += (const T value) 
