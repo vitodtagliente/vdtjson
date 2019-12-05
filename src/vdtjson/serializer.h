@@ -6,8 +6,15 @@
 
 namespace json
 {
+	std::string to_string(const value&);
+	std::string to_string(const number&);
+	std::string to_string(const value::array_t&);
+	std::string to_string(const value::object_t&);
+
 	std::string to_string(const value& value)
 	{
+		static constexpr char* quote = "\"";
+
 		switch (value.type())
 		{
 		case value::Type::Bool:
@@ -20,7 +27,7 @@ namespace json
 			return to_string(value.as_object());
 		case value::Type::String:
 		default:
-			return value.as_string();
+			return std::string{quote}.append(value.as_string()).append(quote);
 		}
 	}
 
@@ -57,6 +64,24 @@ namespace json
 
 	std::string to_string(const value::object_t& object)
 	{
-		return "";
+		static constexpr char* comma = ",";
+		static constexpr char* quote = "\"";
+		static constexpr char* equals = "\":";
+
+		std::string next{};
+
+		std::string result{ "{" };
+
+		for (const auto& pair : object)
+		{
+			result.append(next)
+				.append(quote)
+				.append(pair.first)
+				.append(equals)
+				.append(to_string(pair.second));
+			next = comma;
+		}
+
+		return result.append("}");
 	}
 }
