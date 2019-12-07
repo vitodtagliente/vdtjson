@@ -32,10 +32,6 @@ int main()
 
 	// deserialization tests
 
-	cout << endl << json::Deserializer::is_string("ciao");
-	cout << endl << json::Deserializer::is_string(" \"ciao\"    ");
-	cout << endl << json::Deserializer::is_string("\"ciao");
-	
 	json::value little_bool = json::parse("true");
 	little_bool = json::parse("    True ");
 	little_bool = json::parse("FALSE   ");

@@ -24,6 +24,11 @@ namespace json
 			return value(parse_string(source));
 		}
 
+	private:
+
+		Deserializer() = default;
+		~Deserializer() = default;
+
 		static bool parse_bool(const std::string& source)
 		{
 			static const std::string pattern{ "true" };
@@ -114,11 +119,6 @@ namespace json
 
 			return std::regex_match(source, pattern);
 		}
-
-	private:
-
-		Deserializer() = default;
-		~Deserializer() = default;
 		
 		static std::vector<std::string> split(const std::string& str, const char delimiter)
 		{
@@ -183,8 +183,5 @@ namespace json
 		static constexpr char tab = '\t';
 	};
 
-	value parse(const std::string& source)
-	{
-		return Deserializer::parse(source);
-	}
+	value parse(const std::string& source){	return Deserializer::parse(source); }
 }

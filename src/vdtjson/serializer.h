@@ -28,6 +28,11 @@ namespace json
 			}
 		}
 
+	private:
+
+		Serializer() = default;
+		~Serializer() = default;
+			   
 		static std::string to_string(const number& number)
 		{
 			switch (number.type())
@@ -77,12 +82,6 @@ namespace json
 			return result.append("}");
 		}
 
-
-	private:
-
-		Serializer() = default;
-		~Serializer() = default;
-
 		static constexpr char* comma = ",";
 		static constexpr char* equals = ":";
 		static constexpr char* quote = "\"";
@@ -90,7 +89,4 @@ namespace json
 	};
 
 	std::string to_string(const value& value) { return Serializer::to_string(value); }
-	std::string to_string(const number& value) { return Serializer::to_string(value); }
-	std::string to_string(const value::array_t& value) { return Serializer::to_string(value); }
-	std::string to_string(const value::object_t& value) { return Serializer::to_string(value); }
 }

@@ -7,7 +7,6 @@
 #include <unordered_map>
 #include <variant>
 #include <vector>
-
 #include "number.h"
 
 namespace json
