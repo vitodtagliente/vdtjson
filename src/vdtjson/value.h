@@ -299,6 +299,47 @@ namespace json
 			return std::get<object_t>(m_value).at(key);
 		}
 
+		bool contains(const std::string& key) const
+		{
+			if (m_type == Type::Object)
+			{
+				const auto& obj = std::get<object_t>(m_value);
+				return obj.find(key) != obj.end();
+			}
+			return false;
+		}
+
+		void push_back(const value& value)
+		{
+			if (m_type == Type::Array)
+			{
+				std::get<array_t>(m_value).push_back(value);
+			}
+		}
+
+		void insert(const std::string& key, const value& value)
+		{
+			if (m_type == Type::Object)
+			{
+				std::get<object_t>(m_value).insert({ key, value });
+			}
+		}
+
+		std::size_t size() const
+		{
+			switch (m_type)
+			{
+			case Type::Array: return std::get<array_t>(m_value).size();
+			case Type::Object: return std::get<object_t>(m_value).size();
+			case Type::Bool: return sizeof(bool);
+			case Type::Number: return sizeof(number);
+			case Type::Null: return 0;
+			case Type::String:
+			default:
+				return std::get<std::string>(m_value).size();
+			}
+		}
+
 	private:
 
 		Type m_type;

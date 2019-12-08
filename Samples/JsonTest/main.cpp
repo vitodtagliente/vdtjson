@@ -23,6 +23,7 @@ int main()
 
 	json::value v({ value("ciao"), value(2), value(3.4f) });
 	json::value ciao("ciao");
+	cout << ciao.size() << endl;
 
 	auto obj = json::object();
 
