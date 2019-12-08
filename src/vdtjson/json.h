@@ -6,7 +6,6 @@
  * https://www.rfc-editor.org/rfc/rfc8259.txt
  */
 
-#include "deserializer.h"
 #include "value.h"
-#include "schema.h"
+#include "deserializer.h"
 #include "serializer.h"

@@ -24,6 +24,8 @@ int main()
 	json::value v({ value("ciao"), value(2), value(3.4f) });
 	json::value ciao("ciao");
 
+	auto obj = json::object();
+
 	v = json::value::object_t{ {"name", value("vito domenico")}, {"surname", value("tagliente")} };
 
 	// cout << endl << json::to_string(a);

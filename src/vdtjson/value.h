@@ -168,18 +168,18 @@ namespace json
 		// Prefix increment operator
 		value& operator++ () 
 		{
-			if (is_number())
-				as_number()++;
+			if (m_type == Type::Number)
+				std::get<number>(m_value)++;
 			return *this;
 		}
 
 		// Postfix increment operator
 		value operator++ (int)
 		{
-			if (is_number())
+			if (m_type == Type::Number)
 			{
-				value temp(as_number());
-				as_number()++;
+				value temp(std::get<number>(m_value));
+				std::get<number>(m_value)++;
 				return temp;
 			}
 			return *this;
@@ -188,18 +188,18 @@ namespace json
 		// Prefix decrement operator
 		value& operator-- ()
 		{
-			if (is_number())
-				as_number()--;
+			if (m_type == Type::Number)
+				std::get<number>(m_value)--;
 			return *this;
 		}
 
 		// Postfix decrement operator
 		value operator-- (int)
 		{
-			if (is_number())
+			if (m_type == Type::Number)
 			{
-				value temp(as_number());
-				as_number()--;
+				value temp(std::get<number>(m_value));
+				std::get<number>(m_value)--;
 				return temp;
 			}
 			return *this;
@@ -271,32 +271,32 @@ namespace json
 
 		value& operator[](size_t index)
 		{
-			return as_array().at(index);
+			return std::get<array_t>(m_value).at(index);
 		}
 
 		const value& operator[](size_t index) const
 		{
-			return as_array().at(index);
+			return std::get<array_t>(m_value).at(index);
 		}
 
 		value& operator[](const char* key)
 		{
-			return as_object()[std::string(key)];
+			return std::get<object_t>(m_value)[std::string(key)];
 		}
 
 		value& operator[](const std::string& key)
 		{
-			return as_object()[key];
+			return std::get<object_t>(m_value)[key];
 		}
 
 		const value& operator[](const char* key) const
 		{
-			return as_object().at(std::string(key));
+			return std::get<object_t>(m_value).at(std::string(key));
 		}
 
 		const value& operator[](const std::string& key) const
 		{
-			return as_object().at(key);
+			return std::get<object_t>(m_value).at(key);
 		}
 
 	private:
@@ -305,4 +305,9 @@ namespace json
 		std::variant<array_t, bool, number, object_t, std::string> m_value;
 
 	};
+
+	value array() { return value{ value::array_t{} }; }
+	value array(const value::array_t& data) { return value(data); }
+	value object() { return value{ value::object_t{} }; }
+	value object(const value::object_t& data) { return value(data); }
 }
