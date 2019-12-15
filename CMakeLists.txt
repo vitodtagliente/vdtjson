@@ -29,4 +29,4 @@ add_library(
 )
 
 # Samples
-add_subdirectory(Samples/JsonTest)
+add_subdirectory(samples/sandbox)
