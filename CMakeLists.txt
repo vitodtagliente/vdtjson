@@ -4,7 +4,6 @@ project(vdtjson)
 enable_testing()
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY lib/)
 
 # recursively include all source files
 file(GLOB_RECURSE PROJECT_SOURCE_FILES ${PROJECT_SOURCE_DIR}/src/*.h ${PROJECT_SOURCE_DIR}/src/*.cpp)
@@ -23,10 +22,5 @@ endforeach()
 add_library(
     ${PROJECT_NAME} 
 	STATIC
-    #${PROJECT_HEADERS}
-    #${PROJECT_SOURCES} 
 	${PROJECT_SOURCE_FILES}
 )
-
-# Samples
-add_subdirectory(samples/sandbox)

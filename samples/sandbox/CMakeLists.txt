@@ -3,6 +3,8 @@ get_filename_component(ProjectId ${CMAKE_CURRENT_SOURCE_DIR} NAME)
 string(REPLACE " " "_" ProjectId ${ProjectId})
 project(${ProjectId})
 
+set(CMAKE_CXX_STANDARD 17)
+
 include_directories(. ../../src/)
 
 file(GLOB PROJECT_HEADERS *.h) 
@@ -18,4 +20,7 @@ add_executable(
 
 target_link_libraries(
     ${PROJECT_NAME} 
+	vdtjson
 )
+
+add_subdirectory(../../ vdtjson)
