@@ -1,7 +1,6 @@
 /// Copyright (c) Vito Domenico Tagliente
 #pragma once
 
-#include <initializer_list>
 #include <string>
 #include <unordered_map>
 #include <variant>
@@ -76,11 +75,6 @@ namespace json
 		value(const number& value)
 			: m_type(Type::Number)
 			, m_value(value)
-		{}
-
-		value(const std::initializer_list<value>& values)
-			: m_type(Type::Array)
-			, m_value(array_t{ values })
 		{}
 
 		Type type() const { return m_type; }

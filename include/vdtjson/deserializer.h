@@ -134,8 +134,10 @@ namespace json
 
 		static std::string to_lower(const std::string& str)
 		{
-			std::string result(str);
-			std::transform(result.begin(), result.end(), result.begin(), ::tolower);
+			std::string result;
+			std::transform(str.begin(), str.end(), std::back_inserter(result),
+				[](const char c) -> char { return static_cast<char>(std::tolower(c)); }
+			);
 			return result;
 		}
 

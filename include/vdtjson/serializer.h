@@ -22,8 +22,10 @@ namespace json
 			case value::Type::Object:
 				return to_string(value.as_object());
 			case value::Type::String:
-			default:
 				return std::string{ quote }.append(value.as_string()).append(quote);
+			case value::Type::Null:
+			default:
+				return "null";
 			}
 		}
 
