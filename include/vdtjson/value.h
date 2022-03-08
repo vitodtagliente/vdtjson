@@ -1,5 +1,4 @@
 /// Copyright (c) Vito Domenico Tagliente
-
 #pragma once
 
 #include <initializer_list>
@@ -7,6 +6,7 @@
 #include <unordered_map>
 #include <variant>
 #include <vector>
+
 #include "number.h"
 
 namespace json

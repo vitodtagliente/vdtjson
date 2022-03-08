@@ -1,11 +1,11 @@
 /// Copyright (c) Vito Domenico Tagliente
-
 #pragma once
 
 #include <algorithm>
 #include <regex>
 #include <sstream>
 #include <vector>
+
 #include "value.h"
 
 namespace json

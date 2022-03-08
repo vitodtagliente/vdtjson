@@ -6,22 +6,11 @@ project(vdtjson)
 
 set(CMAKE_CXX_STANDARD 17)
 
-file(GLOB_RECURSE PROJECT_HEADERS "include/vdtjson/*.h") 
-file(GLOB_RECURSE PROJECT_SOURCES "source/*.cpp")
+file(GLOB PROJECT_HEADERS "include/vdtjson/*.h") 
+file(GLOB PROJECT_SOURCES "source/*.cpp")
 
-foreach(_source IN ITEMS ${PROJECT_HEADERS})
-    get_filename_component(_source_path "${_source}" PATH)
-    file(RELATIVE_PATH _source_path_rel "${PROJECT_SOURCE_DIR}" "${_source_path}")
-    string(REPLACE "/" "\\" _group_path "${_source_path_rel}")
-    source_group("${_group_path}" FILES "${_source}")
-endforeach()
-
-foreach(_source IN ITEMS ${PROJECT_SOURCES})
-    get_filename_component(_source_path "${_source}" PATH)
-    file(RELATIVE_PATH _source_path_rel "${PROJECT_SOURCE_DIR}" "${_source_path}")
-    string(REPLACE "/" "\\" _group_path "${_source_path_rel}")
-    source_group("${_group_path}" FILES "${_source}")
-endforeach()
+source_group("Headers" FILES ${PROJECT_HEADERS})
+source_group("Sources" FILES ${PROJECT_SOURCES})
 
 add_library(
     ${PROJECT_NAME} 

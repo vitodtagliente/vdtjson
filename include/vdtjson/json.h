@@ -1,4 +1,5 @@
 /// Copyright (c) Vito Domenico Tagliente
+#pragma once
 
 /*
  * The JavaScript Object Notation (JSON) Data Interchange Format
