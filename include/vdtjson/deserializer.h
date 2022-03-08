@@ -183,5 +183,5 @@ namespace json
 		static constexpr char tab = '\t';
 	};
 
-	value parse(const std::string& source){	return Deserializer::parse(source); }
+	value parse(const std::string& source);
 }

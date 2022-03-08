@@ -347,8 +347,8 @@ namespace json
 
 	};
 
-	value array() { return value{ value::array_t{} }; }
-	value array(const value::array_t& data) { return value(data); }
-	value object() { return value{ value::object_t{} }; }
-	value object(const value::object_t& data) { return value(data); }
+	value array();
+	value array(const value::array_t& data);
+	value object();
+	value object(const value::object_t& data);
 }

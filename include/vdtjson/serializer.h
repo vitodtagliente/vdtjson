@@ -87,5 +87,5 @@ namespace json
 		static constexpr char* quote_equals = "\":";
 	};
 
-	std::string to_string(const value& value) { return Serializer::to_string(value); }
+	std::string to_string(const value& value);
 }
