@@ -136,7 +136,7 @@ namespace json
 				return pos;
 			};
 
-			std::string& src{ trim(source, space) };
+			std::string src{ trim(source, space) };
 			value::object_t object;
 
 			size_t index = 0;
