@@ -59,19 +59,103 @@ namespace json
 
 		static value::object_t parse_object(const std::string& source)
 		{
-			const std::string& src{ ltrim(rtrim(trim(source, space), rgraphb), lgraphb) };
-			value::object_t object;
-			for (const std::string& line : split(src, comma))
+			static const auto next_key = [](const std::string& text, std::string& key) -> size_t
 			{
-				const std::vector<std::string>& parts = split(line, equals);
-				if (parts.size() == 2)
+				key.clear();
+				const size_t end = text.find(quote_equals);
+				if (end != std::string::npos)
 				{
-					object.insert({ 
-						parse_string(parts[0]),
-						parse(parts[1]) 
-						});
+					const size_t begin = text.find_last_of(quote, end - 1);
+					if (begin != std::string::npos)
+					{
+						key = text.substr(begin + 1, end - 1 - begin);
+					}
 				}
-			}
+				return end;
+			};
+
+			static const auto next_closure = [](const std::string& text, const char left, const char right) -> size_t
+			{
+				size_t n = 0;
+				for (size_t i = 1; i < text.length(); ++i)
+				{
+					const char c = text.at(i);
+					if (c == left)
+					{
+						++n;
+					}
+					else if (c == right)
+					{
+						if (n == 0)
+						{
+							return (i + 1);
+						}
+						--n;
+					}
+				}
+
+				return std::string::npos;
+			};
+
+			static const auto until_next = [](const std::string& text, const std::vector<char>& characters) -> size_t
+			{
+				for (size_t i = 0; i < text.length(); ++i)
+				{
+					if (std::find(characters.begin(), characters.end(), text.at(i)) != characters.end())
+					{
+						return i;
+					}
+				}
+				return text.length();
+			};
+
+			static const auto next_value = [](const std::string& text, std::string& value) -> size_t
+			{
+				value.clear();
+
+				if (text.empty())
+				{
+					return 0;
+				}
+
+				size_t pos = 0;
+				if (text.at(0) == lgraphb)
+				{
+					pos = next_closure(text, lgraphb, rgraphb);
+				}
+				else if (text.at(0) == lsquareb)
+				{
+					pos = next_closure(text, lsquareb, rsquareb);
+				}
+				else
+				{
+					pos = until_next(text, { comma, rsquareb, rgraphb });
+				}
+
+				value = text.substr(0, pos);
+				return pos;
+			};
+
+			std::string& src{ trim(source, space) };
+			value::object_t object;
+
+			size_t index = 0;
+			std::string key, value;
+			while ((index = next_key(src, key)) != std::string::npos)
+			{
+				src = src.substr(index + 2);
+				index = next_value(src, value);
+				if (index != std::string::npos)
+				{
+					object.insert({ key, parse(value) });
+					src = src.substr(index + 1);
+				}
+				else
+				{
+					break;
+				}
+			};
+
 			return object;
 		}
 

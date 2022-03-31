@@ -48,6 +48,8 @@ int main()
 
 	json::value little_obj = json::parse(" {\"name\": \"vito\", \"age\": 27} ");
 
+	json::value nested_ob = json::parse("{\"image\":\"222601788947200\",\"rect\":{\"x\":0.818182,\"width\":0.090909,\"y\":0.272727,\"height\":0.090909}}");
+
 	cout << "Premi un tasto per continuare...";
 	return getchar();
 }
