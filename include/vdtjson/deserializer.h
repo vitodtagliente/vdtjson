@@ -45,97 +45,26 @@ namespace json
 		{
 			return trim(trim(source, space), quote);
 		}
-		 
+
 		static value::array_t parse_array(const std::string& source)
 		{
-			const std::string& src{ ltrim(rtrim(trim(source, space), rsquareb), lsquareb) };
+			std::string src{ trim(source, space) };
+			src = src.substr(1, src.length() - 2);
 			value::array_t array;
-			for (const std::string& token : split(src, comma))
+
+			size_t index = 0;
+			std::string value;
+			while (!src.empty() && (index = next_value(src, value)) != std::string::npos)
 			{
-				array.push_back(parse(token));
-			}
+				array.push_back(parse(value));
+				src = src.substr(std::min(src.length(), index + 1));
+			};
+
 			return array;
 		}
 
 		static value::object_t parse_object(const std::string& source)
 		{
-			static const auto next_key = [](const std::string& text, std::string& key) -> size_t
-			{
-				key.clear();
-				const size_t end = text.find(quote_equals);
-				if (end != std::string::npos)
-				{
-					const size_t begin = text.find_last_of(quote, end - 1);
-					if (begin != std::string::npos)
-					{
-						key = text.substr(begin + 1, end - 1 - begin);
-					}
-				}
-				return end;
-			};
-
-			static const auto next_closure = [](const std::string& text, const char left, const char right) -> size_t
-			{
-				size_t n = 0;
-				for (size_t i = 1; i < text.length(); ++i)
-				{
-					const char c = text.at(i);
-					if (c == left)
-					{
-						++n;
-					}
-					else if (c == right)
-					{
-						if (n == 0)
-						{
-							return (i + 1);
-						}
-						--n;
-					}
-				}
-
-				return std::string::npos;
-			};
-
-			static const auto until_next = [](const std::string& text, const std::vector<char>& characters) -> size_t
-			{
-				for (size_t i = 0; i < text.length(); ++i)
-				{
-					if (std::find(characters.begin(), characters.end(), text.at(i)) != characters.end())
-					{
-						return i;
-					}
-				}
-				return text.length();
-			};
-
-			static const auto next_value = [](const std::string& text, std::string& value) -> size_t
-			{
-				value.clear();
-
-				if (text.empty())
-				{
-					return 0;
-				}
-
-				size_t pos = 0;
-				if (text.at(0) == lgraphb)
-				{
-					pos = next_closure(text, lgraphb, rgraphb);
-				}
-				else if (text.at(0) == lsquareb)
-				{
-					pos = next_closure(text, lsquareb, rsquareb);
-				}
-				else
-				{
-					pos = until_next(text, { comma, rsquareb, rgraphb });
-				}
-
-				value = text.substr(0, pos);
-				return pos;
-			};
-
 			std::string src{ trim(source, space) };
 			value::object_t object;
 
@@ -170,7 +99,7 @@ namespace json
 		{
 			static const std::regex true_pattern{ "^\\s*(T|t)(R|r)(U|u)(E|e)\\s*$" };
 			static const std::regex false_pattern{ "^\\s*(F|f)(A|a)(L|l)(S|s)(E|e)\\s*$" };
-			
+
 			return std::regex_match(source, true_pattern)
 				|| std::regex_match(source, false_pattern);
 		}
@@ -203,7 +132,7 @@ namespace json
 
 			return std::regex_match(source, pattern);
 		}
-		
+
 		static std::vector<std::string> split(const std::string& str, const char delimiter)
 		{
 			std::vector<std::string> tokens;
@@ -254,6 +183,83 @@ namespace json
 		static std::string trim(const std::string& str, const char character)
 		{
 			return ltrim(rtrim(str, character), character);
+		}
+
+		static size_t next_closure(const std::string& text, const char left, const char right)
+		{
+			size_t n = 0;
+			for (size_t i = 1; i < text.length(); ++i)
+			{
+				const char c = text.at(i);
+				if (c == left)
+				{
+					++n;
+				}
+				else if (c == right)
+				{
+					if (n == 0)
+					{
+						return (i + 1);
+					}
+					--n;
+				}
+			}
+
+			return std::string::npos;
+		}
+
+		static size_t until_next(const std::string& text, const std::vector<char>& characters)
+		{
+			for (size_t i = 0; i < text.length(); ++i)
+			{
+				if (std::find(characters.begin(), characters.end(), text.at(i)) != characters.end())
+				{
+					return i;
+				}
+			}
+			return text.length();
+		}
+
+		static size_t next_key(const std::string& text, std::string& key)
+		{
+			key.clear();
+			const size_t end = text.find(quote_equals);
+			if (end != std::string::npos)
+			{
+				const size_t begin = text.find_last_of(quote, end - 1);
+				if (begin != std::string::npos)
+				{
+					key = text.substr(begin + 1, end - 1 - begin);
+				}
+			}
+			return end;
+		}
+
+		static size_t next_value(const std::string& text, std::string& value)
+		{
+			value.clear();
+
+			if (text.empty())
+			{
+				return 0;
+			}
+
+			size_t pos = 0;
+			if (text.at(0) == lgraphb)
+			{
+				pos = next_closure(text, lgraphb, rgraphb);
+			}
+			else if (text.at(0) == lsquareb)
+			{
+				pos = next_closure(text, lsquareb, rsquareb);
+			}
+			else
+			{
+				pos = until_next(text, { comma, rsquareb, rgraphb });
+			}
+
+			value = text.substr(0, pos);
+			return pos;
 		}
 
 		static constexpr char comma = ',';
