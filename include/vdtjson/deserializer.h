@@ -2,7 +2,6 @@
 #pragma once
 
 #include <algorithm>
-#include <regex>
 #include <sstream>
 #include <vector>
 
@@ -90,47 +89,42 @@ namespace json
 
 		static bool is_array(const std::string& source)
 		{
-			static const std::regex pattern{ "^\\s*\\[(.|\\n)*\\]\\s*$" };
-
-			return std::regex_match(source, pattern);
+			const std::string src = trim(source, space);
+			if (src.empty()) return false;
+			return src.at(0) == lsquareb && src.at(src.length() - 1) == rsquareb;
 		}
 
 		static bool is_bool(const std::string& source)
 		{
-			static const std::regex true_pattern{ "^\\s*(T|t)(R|r)(U|u)(E|e)\\s*$" };
-			static const std::regex false_pattern{ "^\\s*(F|f)(A|a)(L|l)(S|s)(E|e)\\s*$" };
-
-			return std::regex_match(source, true_pattern)
-				|| std::regex_match(source, false_pattern);
+			const std::string src = to_lower(trim(source, space));
+			return src == "true"
+				|| src == "false";
 		}
 
 		static bool is_null(const std::string& source)
 		{
-			static const std::regex pattern{ "^\\s*(N|n)(U|u)(L|l)(L|l)\\s*$" };
-
-			return std::regex_match(source, pattern);
+			const std::string src = to_lower(trim(source, space));
+			return src == "null";
 		}
 
 		static bool is_number(const std::string& source)
 		{
-			static const std::regex pattern{ "^\\s*[+-]?\\d*\\.\\d+$|^\\s*[+-]?\\d+(\\.\\d*)?\\s*$" };
-
-			return std::regex_match(source, pattern);
+			const std::string src = trim(source, space);
+			return !src.empty() && src.find_first_not_of("-.0123456789") == std::string::npos;
 		}
 
 		static bool is_object(const std::string& source)
 		{
-			static const std::regex pattern{ "^\\s*\\{(.|\\n)*\\}\\s*$" };
-
-			return std::regex_match(source, pattern);
+			const std::string src = trim(source, space);
+			if (src.empty()) return false;
+			return src.at(0) == lgraphb && src.at(src.length() - 1) == rgraphb;
 		}
 
 		static bool is_string(const std::string& source)
 		{
-			// regex: starts with " and ends with ", whitespaces included
-			static const std::regex pattern{ "^\\s*\".*\"\\s*$" };
-
-			return std::regex_match(source, pattern);
+			const std::string src = trim(source, space);
+			if (src.empty()) return false;
+			return src.at(0) == quote && src.at(src.length() - 1) == quote;
 		}
 
 		static std::vector<std::string> split(const std::string& str, const char delimiter)

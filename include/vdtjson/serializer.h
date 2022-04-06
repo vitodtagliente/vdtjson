@@ -14,7 +14,7 @@ namespace json
 			switch (value.type())
 			{
 			case value::Type::Bool:
-				return std::to_string(value.as_bool());
+				return value.as_bool() ? "true" : "false";
 			case value::Type::Number:
 				return to_string(value.as_number());
 			case value::Type::Array:
@@ -33,7 +33,7 @@ namespace json
 
 		Serializer() = default;
 		~Serializer() = default;
-			   
+
 		static std::string to_string(const number& number)
 		{
 			switch (number.type())
