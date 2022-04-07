@@ -11,9 +11,9 @@ namespace json
 
 		enum class Type : uint8_t
 		{
-			Int		= 0,
-			Float	= 1,
-			Double	= 2
+			Int = 0,
+			Float = 1,
+			Double = 2
 		};
 
 		using value_t = double;
@@ -45,6 +45,10 @@ namespace json
 		int as_int() const { return static_cast<int>(m_value); }
 		float as_float() const { return static_cast<float>(m_value); }
 		double as_double() const { return m_value; }
+
+		int as_int(const int value) const { return is_int() ? as_int() : value; }
+		float as_float(const float value) const { return is_float() ? as_float() : value; }
+		double as_double(const double value) const { return is_double() ? as_double() : value; }
 
 		Type type() const { return m_type; }
 
@@ -101,55 +105,55 @@ namespace json
 		}
 
 		template<typename T, typename TEnable = std::enable_if_t<std::is_arithmetic<T>::value>>
-		number& operator += (const T value) 
-		{ 
-			m_value += static_cast<double>(value); 
-			return *this; 
-		}
-
-		template<typename T, typename TEnable = std::enable_if_t<std::is_arithmetic<T>::value>>
-		number& operator -= (const T value) 
-		{ 
-			m_value -= static_cast<double>(value); 
-			return *this; 
-		}
-
-		template<typename T, typename TEnable = std::enable_if_t<std::is_arithmetic<T>::value>>
-		number& operator *= (const T value) 
+		number& operator += (const T value)
 		{
-			m_value *= static_cast<double>(value); 
-			return *this; 
+			m_value += static_cast<double>(value);
+			return *this;
 		}
 
 		template<typename T, typename TEnable = std::enable_if_t<std::is_arithmetic<T>::value>>
-		number& operator /= (const T value) 
-		{ 
-			m_value /= static_cast<double>(value); 
-			return *this; 
+		number& operator -= (const T value)
+		{
+			m_value -= static_cast<double>(value);
+			return *this;
 		}
 
 		template<typename T, typename TEnable = std::enable_if_t<std::is_arithmetic<T>::value>>
-		number operator+ (const T value) const 
-		{ 
-			return number(m_type, m_value + static_cast<double>(value)); 
+		number& operator *= (const T value)
+		{
+			m_value *= static_cast<double>(value);
+			return *this;
 		}
 
 		template<typename T, typename TEnable = std::enable_if_t<std::is_arithmetic<T>::value>>
-		number operator- (const T value) const 
-		{ 
-			return number(m_type, m_value - static_cast<double>(value)); 
+		number& operator /= (const T value)
+		{
+			m_value /= static_cast<double>(value);
+			return *this;
 		}
 
 		template<typename T, typename TEnable = std::enable_if_t<std::is_arithmetic<T>::value>>
-		number operator* (const T value) const 
-		{ 
-			return number(m_type, m_value * static_cast<double>(value)); 
+		number operator+ (const T value) const
+		{
+			return number(m_type, m_value + static_cast<double>(value));
 		}
 
 		template<typename T, typename TEnable = std::enable_if_t<std::is_arithmetic<T>::value>>
-		number operator/ (const T value) const 
-		{ 
-			return number(m_type, m_value / static_cast<double>(value)); 
+		number operator- (const T value) const
+		{
+			return number(m_type, m_value - static_cast<double>(value));
+		}
+
+		template<typename T, typename TEnable = std::enable_if_t<std::is_arithmetic<T>::value>>
+		number operator* (const T value) const
+		{
+			return number(m_type, m_value * static_cast<double>(value));
+		}
+
+		template<typename T, typename TEnable = std::enable_if_t<std::is_arithmetic<T>::value>>
+		number operator/ (const T value) const
+		{
+			return number(m_type, m_value / static_cast<double>(value));
 		}
 
 	private:
@@ -158,7 +162,7 @@ namespace json
 			: m_type(type)
 			, m_value(value)
 		{}
-		
+
 		Type m_type;
 		value_t m_value;
 	};

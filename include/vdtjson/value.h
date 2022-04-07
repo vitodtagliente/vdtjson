@@ -16,12 +16,12 @@ namespace json
 
 		enum class Type : uint8_t
 		{
-			Array	= 0,
-			Bool	= 1,
-			Null	= 2,
-			Number	= 3,
-			Object	= 4,
-			String	= 5
+			Array = 0,
+			Bool = 1,
+			Null = 2,
+			Number = 3,
+			Object = 4,
+			String = 5
 		};
 
 		using array_t = std::vector<value>;
@@ -98,6 +98,12 @@ namespace json
 		const object_t& as_object() const { return std::get<object_t>(m_value); }
 		const std::string& as_string() const { return std::get<std::string>(m_value); }
 
+		bool as_bool(const bool value) const { return is_bool() ? as_bool() : value; }
+		const number& as_number(const number& value) const { return is_number() ? as_number() : value; }
+		const array_t& as_array(const array_t& value) const { return is_array() ? as_array() : value; }
+		const object_t& as_object(const object_t& value) const { return is_object() ? as_object() : value; }
+		const std::string& as_string(const std::string& value) const { return is_string() ? as_string() : value; }
+
 		bool operator== (const value& other) const
 		{
 			return m_type == other.m_type
@@ -110,57 +116,57 @@ namespace json
 				|| m_value != other.m_value;
 		}
 
-		value& operator= (const bool value)	
-		{ 
-			m_type = Type::Bool; 
-			m_value = value;	
-			return *this; 
+		value& operator= (const bool value)
+		{
+			m_type = Type::Bool;
+			m_value = value;
+			return *this;
 		}
-		
-		value& operator= (const int value) 
-		{ 
-			m_type = Type::Number; 
-			m_value = number(value); 
-			return *this; 
+
+		value& operator= (const int value)
+		{
+			m_type = Type::Number;
+			m_value = number(value);
+			return *this;
 		}
-		
-		value& operator= (const float value) 
-		{ 
-			m_type = Type::Number; 
-			m_value = number(value); 
-			return *this; 
+
+		value& operator= (const float value)
+		{
+			m_type = Type::Number;
+			m_value = number(value);
+			return *this;
 		}
-		
-		value& operator= (const double value) 
-		{ 
-			m_type = Type::Number; 
-			m_value = number(value); 
-			return *this; 
+
+		value& operator= (const double value)
+		{
+			m_type = Type::Number;
+			m_value = number(value);
+			return *this;
 		}
-		
-		value& operator= (const array_t& value) 
-		{ 
-			m_type = Type::Array; 
-			m_value = value; 
-			return *this; 
+
+		value& operator= (const array_t& value)
+		{
+			m_type = Type::Array;
+			m_value = value;
+			return *this;
 		}
-		
-		value& operator= (const std::string& value) 
-		{ 
-			m_type = Type::String; 
-			m_value = value; 
-			return *this; 
+
+		value& operator= (const std::string& value)
+		{
+			m_type = Type::String;
+			m_value = value;
+			return *this;
 		}
-		
-		value& operator= (const object_t& value) 
-		{ 
-			m_type = Type::Object; 
-			m_value = value; 
-			return *this; 
+
+		value& operator= (const object_t& value)
+		{
+			m_type = Type::Object;
+			m_value = value;
+			return *this;
 		}
 
 		// Prefix increment operator
-		value& operator++ () 
+		value& operator++ ()
 		{
 			if (m_type == Type::Number)
 				std::get<number>(m_value)++;
@@ -201,40 +207,40 @@ namespace json
 
 		template<typename T, typename TEnable = std::enable_if_t<std::is_arithmetic<T>::value>>
 		value& operator += (const T value)
-		{ 
-			if (m_type == Type::Number) 
-				std::get<number>(m_value) += value; 
-			return *this; 
+		{
+			if (m_type == Type::Number)
+				std::get<number>(m_value) += value;
+			return *this;
 		}
-		
+
 		template<typename T, typename TEnable = std::enable_if_t<std::is_arithmetic<T>::value>>
 		value& operator -= (const T value)
-		{ 
-			if (m_type == Type::Number) 
-				std::get<number>(m_value) -= value; 
-			return *this; 
+		{
+			if (m_type == Type::Number)
+				std::get<number>(m_value) -= value;
+			return *this;
 		}
-		
+
 		template<typename T, typename TEnable = std::enable_if_t<std::is_arithmetic<T>::value>>
 		value& operator *= (const T value)
-		{ 
-			if (m_type == Type::Number) 
-				std::get<number>(m_value) *= value; 
-			return *this; 
+		{
+			if (m_type == Type::Number)
+				std::get<number>(m_value) *= value;
+			return *this;
 		}
-		
+
 		template<typename T, typename TEnable = std::enable_if_t<std::is_arithmetic<T>::value>>
 		value& operator /= (const T value)
-		{ 
-			if (m_type == Type::Number) 
-				std::get<number>(m_value) /= value; 
-			return *this; 
+		{
+			if (m_type == Type::Number)
+				std::get<number>(m_value) /= value;
+			return *this;
 		}
 
 		template<typename T, typename TEnable = std::enable_if_t<std::is_arithmetic<T>::value>>
 		value operator+ (const T value) const
 		{
-			if (m_type == Type::Number) 
+			if (m_type == Type::Number)
 				return value(as_number() + value);
 			return *this;
 		}
