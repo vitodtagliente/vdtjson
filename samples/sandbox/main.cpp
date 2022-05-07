@@ -28,6 +28,7 @@ int main()
 	auto obj = json::object();
 
 	v = json::value::object_t{ {"name", value("vito domenico")}, {"surname", value("tagliente")} };
+	v.safeAt("foo").as_bool(false);
 
 	// cout << endl << json::to_string(a);
 	// cout << endl << json::to_string(ciao);

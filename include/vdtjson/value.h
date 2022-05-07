@@ -274,7 +274,17 @@ namespace json
 			return std::get<array_t>(m_value).at(index);
 		}
 
-		const value& operator[](size_t index) const
+		value& at(const size_t index)
+		{
+			return std::get<array_t>(m_value).at(index);
+		}
+
+		const value& operator[](const size_t index) const
+		{
+			return std::get<array_t>(m_value).at(index);
+		}
+
+		const value& at(const size_t index) const
 		{
 			return std::get<array_t>(m_value).at(index);
 		}
@@ -284,9 +294,9 @@ namespace json
 			return std::get<object_t>(m_value)[std::string(key)];
 		}
 
-		value& operator[](const std::string& key)
+		value& at(const char* key)
 		{
-			return std::get<object_t>(m_value)[key];
+			return std::get<object_t>(m_value).at(std::string(key));
 		}
 
 		const value& operator[](const char* key) const
@@ -294,9 +304,61 @@ namespace json
 			return std::get<object_t>(m_value).at(std::string(key));
 		}
 
+		const value& at(const char* key) const
+		{
+			return std::get<object_t>(m_value).at(std::string(key));
+		}
+
+		const value& safeAt(const char* key) const
+		{
+			static value s_default;
+
+			if (m_type == Type::Object)
+			{
+				const auto& data = std::get<object_t>(m_value);
+				const auto& it = data.find(std::string(key));
+				if (it != data.end())
+				{
+					return it->second;
+				}
+			}
+			return s_default;
+		}
+
+		value& operator[](const std::string& key)
+		{
+			return std::get<object_t>(m_value)[key];
+		}
+
+		value& at(const std::string& key)
+		{
+			return std::get<object_t>(m_value).at(key);
+		}
+
 		const value& operator[](const std::string& key) const
 		{
 			return std::get<object_t>(m_value).at(key);
+		}
+
+		const value& at(const std::string& key) const
+		{
+			return std::get<object_t>(m_value).at(key);
+		}
+
+		const value& safeAt(const std::string& key) const
+		{
+			static value s_default;
+
+			if (m_type == Type::Object)
+			{
+				const auto& data = std::get<object_t>(m_value);
+				const auto& it = data.find(key);
+				if (it != data.end())
+				{
+					return it->second;
+				}
+			}
+			return s_default;
 		}
 
 		bool contains(const std::string& key) const
