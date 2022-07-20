@@ -56,7 +56,8 @@ namespace json
 			while (!src.empty() && (index = next_value(src, value)) != std::string::npos)
 			{
 				array.push_back(parse(value));
-				src = src.substr(std::min(src.length(), index + 1));
+				const size_t minIndex = src.length() < index + 1 ? src.length() : index + 1;
+				src = src.substr(minIndex);
 			};
 
 			return array;
